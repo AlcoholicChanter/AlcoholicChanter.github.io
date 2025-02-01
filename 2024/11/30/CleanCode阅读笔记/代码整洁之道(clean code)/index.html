@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"alcoholicchanter.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="《代码整洁之道》这本书重点强调了代码的优美性(易阅读、易理解、易维护、易拓展，四易)。指出了优美代码在整个软件设计中的重要地位，以及该从哪些方面考虑书写代码的优美。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Clean Code Notes">
+<meta property="og:url" content="https://alcoholicchanter.github.io/2024/11/30/CleanCode%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93(clean%20code)/index.html">
+<meta property="og:site_name" content="AlcoholicChanter&#39;s Blog">
+<meta property="og:description" content="《代码整洁之道》这本书重点强调了代码的优美性(易阅读、易理解、易维护、易拓展，四易)。指出了优美代码在整个软件设计中的重要地位，以及该从哪些方面考虑书写代码的优美。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-11-30T06:00:21.000Z">
+<meta property="article:modified_time" content="2025-01-31T04:16:35.000Z">
+<meta property="article:author" content="AlcoholicChanter">
+<meta property="article:tag" content="编程思维">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://alcoholicchanter.github.io/2024/11/30/CleanCode%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93(clean%20code)/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://alcoholicchanter.github.io/2024/11/30/CleanCode%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93(clean%20code)/","path":"2024/11/30/CleanCode阅读笔记/代码整洁之道(clean code)/","title":"Clean Code Notes"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Clean Code Notes | AlcoholicChanter's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">AlcoholicChanter's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">write as one goes along</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Clean-Code-Notes"><span class="nav-number">1.</span> <span class="nav-text">Clean Code Notes</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A6%81%E7%82%B9%E6%80%BB%E7%BB%93"><span class="nav-number">1.1.</span> <span class="nav-text">要点总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E6%9C%89%E6%84%8F%E4%B9%89%E7%9A%84%E5%91%BD%E5%90%8D-Meaningful-Names"><span class="nav-number">1.2.</span> <span class="nav-text">1、有意义的命名(Meaningful Names)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81%E7%B2%BE%E7%AE%80%E7%9A%84%E5%87%BD%E6%95%B0-Small-Function"><span class="nav-number">1.3.</span> <span class="nav-text">2、精简的函数(Small Function)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81%E6%9C%89%E6%95%88%E7%9A%84%E6%B3%A8%E9%87%8A-Effective-Comments"><span class="nav-number">1.4.</span> <span class="nav-text">3、有效的注释(Effective Comments)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4%E3%80%81%E4%BF%9D%E6%8C%81%E4%B8%80%E7%A7%8D%E4%BB%A3%E7%A0%81%E6%A0%BC%E5%BC%8F-Keeping-A-Coding-Format"><span class="nav-number">1.5.</span> <span class="nav-text">4、保持一种代码格式(Keeping A Coding Format)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5%E3%80%81%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E9%94%99%E8%AF%AF-How-to-deal-Error"><span class="nav-number">1.6.</span> <span class="nav-text">5、如何处理错误(How to deal Error)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6%E3%80%81%E5%A6%82%E4%BD%95%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E7%B3%BB%E7%BB%9F%E4%BF%9D%E6%8C%81%E8%BE%B9%E7%95%8C-How-to-Keep-Boundaries-with-Third-Party-Systems"><span class="nav-number">1.7.</span> <span class="nav-text">6、如何与第三方系统保持边界(How to Keep Boundaries with Third-Party Systems)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7%E3%80%81%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95-How-to-Perform-Testing"><span class="nav-number">1.8.</span> <span class="nav-text">7、如何进行测试((How to Perform Testing))</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8%E3%80%81%E7%B2%BE%E7%AE%80%E7%9A%84%E7%B1%BB-Lean-Class"><span class="nav-number">1.9.</span> <span class="nav-text">8、精简的类(Lean Class)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9%E3%80%81%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E7%B3%BB%E7%BB%9F-How-to-Design-a-System"><span class="nav-number">1.10.</span> <span class="nav-text">9、如何设计一个系统(How to Design a System)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10%E3%80%81%E5%A6%82%E4%BD%95%E6%8E%A7%E5%88%B6%E8%BF%AD%E4%BB%A3-How-to-Control-Iterations"><span class="nav-number">1.11.</span> <span class="nav-text">10、如何控制迭代(How to Control Iterations)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11%E3%80%81%E5%B9%B6%E5%8F%91-%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-Concurrency-Programming"><span class="nav-number">1.12.</span> <span class="nav-text">11、并发&#x2F;异步编程(Concurrency Programming)</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">AlcoholicChanter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://alcoholicchanter.github.io/2024/11/30/CleanCode%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93(clean%20code)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="AlcoholicChanter">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AlcoholicChanter's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Clean Code Notes | AlcoholicChanter's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Clean Code Notes
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-11-30 14:00:21" itemprop="dateCreated datePublished" datetime="2024-11-30T14:00:21+08:00">2024-11-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-01-31 12:16:35" itemprop="dateModified" datetime="2025-01-31T12:16:35+08:00">2025-01-31</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>《代码整洁之道》这本书重点强调了代码的优美性(易阅读、易理解、易维护、易拓展，四易)。指出了优美代码在整个软件设计中的重要地位，以及该从哪些方面考虑书写代码的优美。</p>
+<span id="more"></span>
+
+<h1 id="Clean-Code-Notes"><a href="#Clean-Code-Notes" class="headerlink" title="Clean Code Notes"></a>Clean Code Notes</h1><h2 id="要点总结"><a href="#要点总结" class="headerlink" title="要点总结"></a>要点总结</h2><p>《代码整洁之道》这本书重点强调了代码的优美性(易阅读、易理解、易维护、易拓展，四易)。指出了优美代码在整个软件设计中的重要地位，以及该从哪些方面考虑书写代码的优美。</p>
+<p>其中包含了一些原则(some principles of clean code include)：</p>
+<p>1、有意义的命名(Meaningful Name)</p>
+<p>2、尽可能短小的函数(Small Functions)</p>
+<p>3、避免重复(Avoid Duplication)</p>
+<p>4、格式化的代码(Code formatting)</p>
+<p>5、定期重构代码(Refactoring)</p>
+<p>该书并不是一本某项具体技术的实用书籍，它是一本思想教育书籍！意在指导读者改变设计思想，从而使得设计出来的代码更加优美。</p>
+<h2 id="1、有意义的命名-Meaningful-Names"><a href="#1、有意义的命名-Meaningful-Names" class="headerlink" title="1、有意义的命名(Meaningful Names)"></a>1、有意义的命名(Meaningful Names)</h2><p>1.1、使用有意义的命名，不过需要保证命名的简洁性(Be Descriptive,But Concise)。有意义的命名，首先就需要保证命名的内容要名副其实。一定要避免‘挂羊头卖狗肉’的行为！因为这样不仅仅会让其他代码阅读者很难理解，过了一段时间之后，也许作者自己也很难琢磨透这个命名的含义。</p>
+<p>1.2、在一个工程中，尽量统一所有coder的命名规范(Use Consistent Naming Conventions)。例如统一使用 <em>大驼峰命名法</em>  <strong>或者</strong> <em>小驼峰命名法</em>  <strong>或者</strong> <em>蛇形命名法</em> 等等。但不管使用哪种命名法，都请务必要做到保持一致！不然在阅读代码工程中将会无形的增加许多确定的各种命名含义的成本。</p>
+<p>本人现在习惯使用的方式是：</p>
+<p>类名、函数名 &#x3D;&gt; 大驼峰命名法，</p>
+<p>成员变量&#x3D;&gt;小驼峰命名法，</p>
+<p>静态函数&#x3D;&gt;大驼峰命名法+_连接单词</p>
+<p>静态变量&#x3D;&gt;小驼峰命名法+_连接单词</p>
+<p>按照上述这样，可以简单的从命名就可以完成对于各种不同成员的区分。</p>
+<p>虽然在现代IDE的强大辅助性下，这些内容显得没那么重要。不过，既然打算优雅的编写代码，那么细节仍然处于重要地位。</p>
+<p>1.3、避免使用通用名称(Avoid Generic Names)。避免使用类似于data、temp、tmp、things等代词，尽量使用具体要处理的数据代词。如果是通用类型的成员，最好能够抽象出通用的描述词语，如果不能具体的描述，用注释简单标注一下函数的用途。</p>
+<p>1.4、使用有意义的缩写(Use Meaningful Abbreviationsviations)。在团队中统一并规范使用代词缩写，可以考虑专门维护一份文件，用于存储代词缩写所代表的含义，这样减少了整体的命名长度。</p>
+<p>1.5、优先考虑能否使用计算机术语、数学术语、设计模式术语等去进行命名，如果有的话。否则，使用具体领域下的术语(Use Domain-Specific Terms)。在这里需要强调的是，**只有同行者才会去阅读代码！**所以，优先考虑用有交集的领域术语命名，这样理解起来会直白很多。如果不能用这些领域的术语，那么也可以考虑用具体业务的术语，来进行命名。这样至少在询问相关的业务人员之后，也能明白大概的代码意思。</p>
+<p>1.6、和同行者一起讨论命名(ask for feedback)！在无法确定的时候，可以尝试和同行者讨论某种情况下的命名。这是最简单有效的方式，前提是消耗你的☕️。</p>
+<p>1.7、多加思考，以及对变量进行重命名(Practice And Rename)。在短时间内，其实很难设想出一个足够符合语意的名词或者短语去进行描述。可以先选择一个能足够表达含义的词进行命名，在后续的时间里再去考虑这个命名(为什么需要考虑呢？因为描述不够清晰！)，总会有一个足够让你满意的命名在你持续思考之后反馈给你。</p>
+<h2 id="2、精简的函数-Small-Function"><a href="#2、精简的函数-Small-Function" class="headerlink" title="2、精简的函数(Small Function)"></a>2、精简的函数(Small Function)</h2><p>2.1、单一职责原则(Single Responsibility Principle 简称 SRP)。对于SRP，最简单的理解其实就是一个函数只做一件事情。比如：接收数据并存储是一件事情、格式化一段字符是一件事情、将字符渲染到文本上也是一件事情。</p>
+<p>​	对于上述举例，进行反向思考。如果，将接收数据并存储、格式化一段字符、将字符渲染到文本上，这三件事情都放在一个函数里处理，那么这个函数就已经有了god function的雏形了！现在假设需要改动传入数据、需要改动格式化字符的样式、需要改动渲染的文本对象，都需要改动这个函数！…..变更意味着风险！对于维护程序的稳定性来说，需要最大程度的降低变更代码的风险。</p>
+<p>2.2、避免较长的switch和if….else if…结构。</p>
+<table>
+<thead>
+<tr>
+<th><strong>Approach (方法)</strong></th>
+<th><strong>When to Use (使用场景)</strong></th>
+<th><strong>Benefits (优点)</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Lookup Map&#x2F;Object (查找表)</strong></td>
+<td>Mapping values to results or actions (值到结果或操作的映射).</td>
+<td>Simplifies branching logic (简化分支逻辑).</td>
+</tr>
+<tr>
+<td><strong>Strategy Pattern (策略模式)</strong></td>
+<td>When actions depend on conditions (根据条件执行不同操作).</td>
+<td>Modular and extensible (模块化且易扩展).</td>
+</tr>
+<tr>
+<td><strong>Polymorphism (多态)</strong></td>
+<td>Complex logic that varies by type (复杂逻辑按类型变化).</td>
+<td>Clear and reusable design (清晰且可复用的设计).</td>
+</tr>
+<tr>
+<td><strong>Functional Composition</strong></td>
+<td>Modular and reusable logic (模块化且可复用的逻辑).</td>
+<td>Avoids deep nesting (避免深度嵌套).</td>
+</tr>
+</tbody></table>
+<p>2.3、将异常处理当成一件事情！</p>
+<p>2.4、尽量避免重复！一个类似的action存在一个就够了，如果没办法完成抽象。。。。。那么请在一段时间之后将它重构一遍。</p>
+<p>2.5、避免结构化编程。结构化编程的思想，适合处理大的函数，大的类。如果设计足够面向对象，理论上是不会存在大的函数，大的类。</p>
+<h2 id="3、有效的注释-Effective-Comments"><a href="#3、有效的注释-Effective-Comments" class="headerlink" title="3、有效的注释(Effective Comments)"></a>3、有效的注释(Effective Comments)</h2><blockquote>
+<p>“Don’t comment bad code—rewrite it.”</p>
+</blockquote>
+<p>别给糟糕的代码添加注释了，重构它吧。</p>
+<p>代码本身也有阅读的意义。即使是面向阴间的硬编码，再通过令人绝望的解析之后，也是可以进行阅读的。但这和阅读优美的代码是两码事，给人的感受也是完全不同的。前者就好像去了一个看起来能吃的餐馆，点了一份看起来看行的菜，最后吃起来味同嚼蜡；后者则是装在一个精致盒子里的美味蛋糕，首先得费点心思打开精致的盒子，然后才能吃到美味的蛋糕！</p>
+<p>目前看来，注释存在的意义最好只有以下情况：</p>
+<ul>
+<li>法律信息</li>
+<li>某类，某函数用法示例</li>
+<li>行为的意图解释</li>
+<li>危险行为的警告或者标识</li>
+<li>TODO标识</li>
+<li>API标注</li>
+</ul>
+<p>并不一定需要注释存在的情况：</p>
+<ul>
+<li>和类名、函数名表达意思一样的注释</li>
+<li>表述目的不明确的注释</li>
+<li>日志式的注释</li>
+<li>当作特殊标识的注释</li>
+</ul>
+<p>一定不需要存在注释的情况：</p>
+<ul>
+<li>远古注释-但注释下的内容经常改动(容易让阅读者产生误解的注释)</li>
+<li>被注释的代码-有版本控制器，为什么还要注释掉呢…🤔</li>
+<li>大量内容的注释-比如每一次修改的注释，其实读者需要的仅仅只是当前所进行行为的注释就够了</li>
+</ul>
+<p>能够帮助减少上面 并不一定需要存在   和    一定不需要存在注释   的方式其实很简单，做好  有意义的命名  以及    精简的函数！</p>
+<h2 id="4、保持一种代码格式-Keeping-A-Coding-Format"><a href="#4、保持一种代码格式-Keeping-A-Coding-Format" class="headerlink" title="4、保持一种代码格式(Keeping A Coding Format)"></a>4、保持一种代码格式(Keeping A Coding Format)</h2><p>尽量的保持一种编码的格式，从上至下也好，相似的功能放在一起也好。这样可以让经常阅读你代码的人有一种熟悉感。这种感觉并非能够产生实际上的意义，不过也许会让读者减轻一些面对陌生代码时焦急的心理负担。</p>
+<h2 id="5、如何处理错误-How-to-deal-Error"><a href="#5、如何处理错误-How-to-deal-Error" class="headerlink" title="5、如何处理错误(How to deal Error)"></a>5、如何处理错误(How to deal Error)</h2><p>5.1、任何时候，请把处理错误当成一件事情！它应当有一个专门的封装函数，来区分需要捕获异常的代码，以及捕获到异常之后的处理代码。</p>
+<p>5.2、当捕获到异常之后，尽可能的将导致异常的相关信息输出，这将成为后续分析的总要信息依据。</p>
+<p>5.3、当异常发生的时候，需要尽可能的避免异常导致整个程序被阻塞，使用简单的方法，先保证程序不会挂掉。</p>
+<h2 id="6、如何与第三方系统保持边界-How-to-Keep-Boundaries-with-Third-Party-Systems"><a href="#6、如何与第三方系统保持边界-How-to-Keep-Boundaries-with-Third-Party-Systems" class="headerlink" title="6、如何与第三方系统保持边界(How to Keep Boundaries with Third-Party Systems)"></a>6、如何与第三方系统保持边界(How to Keep Boundaries with Third-Party Systems)</h2><p>6.1、对第三方进行接口抽离，保证该第三方系统的接口都在一个可控的范围内。</p>
+<p>6.2、限制第三方接口的访问权限，杜绝让第三方接口充斥核心业务层</p>
+<p>6.3、提前设计好测试的mock数据，在第三方系统进行更新之后，逐一进行测试</p>
+<h2 id="7、如何进行测试-How-to-Perform-Testing"><a href="#7、如何进行测试-How-to-Perform-Testing" class="headerlink" title="7、如何进行测试((How to Perform Testing))"></a>7、如何进行测试((How to Perform Testing))</h2><p>7.1、引入单元测试，针对各个系统的最小功能点进行单元测试，保证各个系统最小计算正确。</p>
+<p>7.2、引入集成测试，针对各个系统独立整体、各个系统之间的数据交互进行集成测试，保持系统整体性正确。</p>
+<p>7.3、引入自动测试流，通过CI&#x2F;CD自动化模式，加之程序员对自己mock数据内容，进行自动化验证数据。</p>
+<p>key point：推进整个项目使用TDD测试模式。</p>
+<p>what is TDD? TDD stands for Tesk-Drive Development.</p>
+<p>通过使用先设计测试数据，如何再编写代码，接着再保证编写的代码能够让数据通过测试，最后再去优化过程代码。</p>
+<p>虽然这种模式会让开发周期在一定程度上延长，但其带来的好处是：</p>
+<p>1、保证能够枚举出来的异常情况的处理，</p>
+<p>2、保证代码的正确性，</p>
+<p>3、保证代码后期维护、优化时的正确性。</p>
+<p>这三点，作为一个开发来说，简直是梦寐以求的开发环境。</p>
+<h2 id="8、精简的类-Lean-Class"><a href="#8、精简的类-Lean-Class" class="headerlink" title="8、精简的类(Lean Class)"></a>8、精简的类(Lean Class)</h2><p>8.1、杜绝god class的出现，一个class不应该尝试做所有事情。每个class应该拥有单一的职责，并且将这件事情做到极致。</p>
+<p>8.2、贯彻单一职责设计思维(SRP)，这样能够增强项目的可拓展性和易维护性。</p>
+<h2 id="9、如何设计一个系统-How-to-Design-a-System"><a href="#9、如何设计一个系统-How-to-Design-a-System" class="headerlink" title="9、如何设计一个系统(How to Design a System)"></a>9、如何设计一个系统(How to Design a System)</h2><p>9.1、遵循五大面向对象设计原则(SOLID)：单一职责原则(S,SRP,Single Responsibility Principle)、开闭原则(O,OCP,Open&#x2F;Closed Principle)、里氏替换原则(L,LSP,Lisko Substitution Principle)、接口隔离原则(I,ISP,Interface Segregation Principle)、依赖倒置原则(D,DIP,Dependency Inversion Principle)。</p>
+<p>9.2、使用模块化设计，使用插拔式去对模块进行加载移除的管理。</p>
+<p>9.3、模块之前的交互，需要抽离专门的接口，避免模块与模块之前的耦合。</p>
+<h2 id="10、如何控制迭代-How-to-Control-Iterations"><a href="#10、如何控制迭代-How-to-Control-Iterations" class="headerlink" title="10、如何控制迭代(How to Control Iterations)"></a>10、如何控制迭代(How to Control Iterations)</h2><p>10.1、贯彻敏捷开发的思想，先区分需求等级，再根据等级去划分大版本、小版本。</p>
+<p>10.2、规划定期复盘，对前段时间进行复盘总结，并且在下一阶段要努力去落实复盘成果。</p>
+<p>10.3、尽可能收集用户反馈，根据用户的反馈来定制版本的更新迭代。</p>
+<h2 id="11、并发-异步编程-Concurrency-Programming"><a href="#11、并发-异步编程-Concurrency-Programming" class="headerlink" title="11、并发&#x2F;异步编程(Concurrency Programming)"></a>11、并发&#x2F;异步编程(Concurrency Programming)</h2><p>11.1、避免可共享的数据状态，使用类似于加锁、Await等手段，保证数据不会被多个并发同时更改。(并发和异步都需要注意⚠️)</p>
+<p>11.2、使用异步来设置程序的阻塞。例如await Promise</p>
+<p>11.3、将并发&#x2F;异步集成为一个系统，封装底层内容，统一管理。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BC%96%E7%A8%8B%E6%80%9D%E7%BB%B4/" rel="tag"># 编程思维</a>
+          </div>
+
+        
+
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">AlcoholicChanter</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
